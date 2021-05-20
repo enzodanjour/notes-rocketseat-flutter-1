@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:notes/create_note_page.dart';
 
 class HomePage extends StatefulWidget {
   @override //homepage é privado pelo _
@@ -22,10 +21,16 @@ class _HomePageState extends State<HomePage> {
               Card(
                 child: ListTile(
                     title: Text(notes[i]),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context, "/create-note",arguments: notes[i]
-                      );
+                    onTap: () async {
+                      var description = await Navigator.pushNamed(
+                          context, "/create-note",
+                          arguments: notes[i]);
+                      //then()
+                      // ou utiliza await com async ou then
+                      if (description != null) {
+                        notes[i] = description as String; //define o tipo
+                        setState(() {});
+                      }
                     }),
               ),
           ],
@@ -34,8 +39,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         //Instância de futuro, pois ainda não tem tal informação
         onPressed: () async {
-          var description = await Navigator.pushNamed(
-              context, "/create-note"); //Adiciona o objeto
+          var description = await Navigator.pushNamed(context, "/create-note");
           //then()
           // ou utiliza await com async ou then
           if (description != null) {
